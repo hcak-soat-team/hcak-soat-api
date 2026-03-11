@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { CategoriesModule } from './categories/categories.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ProductsModule } from './products/products.module';
-import { HealthModule } from './health/health.module';
 import { AppController } from './app.controller';
-import { CustomersModule } from './customers/customers.module';
-import { OrdersModule } from './orders/orders.module';
-import { WebhookModule } from './webhook/webhook.module';
+import { HealthModule } from './health/health.module';
+import { VideosModule } from './modules/videos/videos.module';
+import { ProcessingJobsModule } from './modules/processing-jobs/processing-jobs.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -22,13 +21,13 @@ import { WebhookModule } from './webhook/webhook.module';
       database: process.env.DATABASE_NAME || 'postgres',
       autoLoadEntities: true,
       synchronize: false,
+      entities: ['src/**/*.entity.ts'],
+      migrations: ['migrations/*.ts'],
     }),
-    CategoriesModule,
-    ProductsModule,
-    CustomersModule,
     HealthModule,
-    OrdersModule,
-    WebhookModule, 
+    VideosModule,
+    ProcessingJobsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
 })
