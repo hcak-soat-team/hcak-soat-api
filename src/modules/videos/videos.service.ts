@@ -11,11 +11,11 @@ export class VideosService {
     private videoRepository: Repository<Video>,
   ) {}
 
-  async createVideo(createVideoDto: any): Promise<Video> {
+  async createVideo(createVideoDto: any): Promise<any> {
     const video = this.videoRepository.create({
       id: uuidv4(),
       ...createVideoDto,
-      status: VideoStatus.PENDING,
+      status: "PENDING" as VideoStatus,
     });
     return this.videoRepository.save(video);
   }
@@ -27,12 +27,13 @@ export class VideosService {
     });
   }
 
-  async getVideoById(id: string): Promise<Video> {
+  async getVideoById(id: string): Promise<Video | null> {
     return this.videoRepository.findOne({ where: { id } });
   }
 
-  async updateVideoStatus(id: string, status: VideoStatus): Promise<Video> {
+  async updateVideoStatus(id: string, status: VideoStatus): Promise<Video | null> {
     const video = await this.getVideoById(id);
+    if (!video) return null;
     video.status = status;
     return this.videoRepository.save(video);
   }

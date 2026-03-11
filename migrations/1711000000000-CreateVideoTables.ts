@@ -11,7 +11,6 @@ export class CreateVideoTables1711000000000 implements MigrationInterface {
             name: "id",
             type: "uuid",
             isPrimary: true,
-            default: "uuid_generate_v4()",
           },
           {
             name: "userId",
@@ -92,7 +91,6 @@ export class CreateVideoTables1711000000000 implements MigrationInterface {
             name: "id",
             type: "uuid",
             isPrimary: true,
-            default: "uuid_generate_v4()",
           },
           {
             name: "videoId",
@@ -166,7 +164,6 @@ export class CreateVideoTables1711000000000 implements MigrationInterface {
             name: "id",
             type: "uuid",
             isPrimary: true,
-            default: "uuid_generate_v4()",
           },
           {
             name: "videoId",

@@ -1,11 +1,6 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
-export enum VideoStatus {
-  PENDING = "PENDING",
-  PROCESSING = "PROCESSING",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-}
+export type VideoStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
 
 @Entity("videos")
 export class Video {
@@ -27,7 +22,7 @@ export class Video {
   @Column("varchar", { nullable: true })
   mimeType: string;
 
-  @Column("enum", { enum: VideoStatus, default: VideoStatus.PENDING })
+  @Column("enum", { enum: ["PENDING", "PROCESSING", "COMPLETED", "FAILED"], default: "PENDING" })
   status: VideoStatus;
 
   @Column("varchar", { nullable: true })

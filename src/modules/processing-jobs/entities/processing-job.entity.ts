@@ -1,11 +1,6 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-export enum JobStatus {
-  PENDING = "PENDING",
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-}
+export type JobStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 
 @Entity("processing_jobs")
 export class ProcessingJob {
@@ -15,7 +10,7 @@ export class ProcessingJob {
   @Column("uuid")
   videoId: string;
 
-  @Column("enum", { enum: JobStatus, default: JobStatus.PENDING })
+  @Column("enum", { enum: ["PENDING", "IN_PROGRESS", "COMPLETED", "FAILED"], default: "PENDING" })
   status: JobStatus;
 
   @Column("integer", { nullable: true })

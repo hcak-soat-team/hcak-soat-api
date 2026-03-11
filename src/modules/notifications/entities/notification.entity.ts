@@ -1,17 +1,8 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn } from "typeorm";
 
-export enum NotificationType {
-  UPLOAD_COMPLETED = "UPLOAD_COMPLETED",
-  PROCESSING_STARTED = "PROCESSING_STARTED",
-  PROCESSING_COMPLETED = "PROCESSING_COMPLETED",
-  PROCESSING_FAILED = "PROCESSING_FAILED",
-}
+export type NotificationType = "UPLOAD_COMPLETED" | "PROCESSING_STARTED" | "PROCESSING_COMPLETED" | "PROCESSING_FAILED";
 
-export enum NotificationStatus {
-  PENDING = "PENDING",
-  SENT = "SENT",
-  FAILED = "FAILED",
-}
+export type NotificationStatus = "PENDING" | "SENT" | "FAILED";
 
 @Entity("notifications")
 export class Notification {
@@ -27,10 +18,10 @@ export class Notification {
   @Column("varchar")
   recipientEmail: string;
 
-  @Column("enum", { enum: NotificationType })
+  @Column("enum", { enum: ["UPLOAD_COMPLETED", "PROCESSING_STARTED", "PROCESSING_COMPLETED", "PROCESSING_FAILED"] })
   type: NotificationType;
 
-  @Column("enum", { enum: NotificationStatus, default: NotificationStatus.PENDING })
+  @Column("enum", { enum: ["PENDING", "SENT", "FAILED"], default: "PENDING" })
   status: NotificationStatus;
 
   @Column("text", { nullable: true })
