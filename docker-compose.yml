@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   api-dev:
     build:
@@ -13,43 +15,78 @@ services:
       - DATABASE_PORT=5432
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=postgres
+      - DATABASE_NAME=hcak_soat_api
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - S3_BUCKET=hcak-soat-videos
+      - SQS_QUEUE_URL=http://localstack:4566/000000000000/video-processing-queue
+      - REDIS_URL=redis://redis-dev:6379
     networks:
       - dev-network
     depends_on:
       - postgres-dev
-
-  ngrok:
-    image: ngrok/ngrok:latest
-    restart: unless-stopped
-    command:
-      - "start"
-      - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
-    volumes:
-      - ./ngrok.yml:/etc/ngrok.yml
-    ports:
-      - 4040:4040
-    networks:
-      - dev-network
+      - redis-dev
+      - localstack
 
   postgres-dev:
     image: postgres:15-alpine
+    container_name: hcak_soat_postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=hcak_soat_api
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-dev:
+    image: redis:7-alpine
+    container_name: hcak_soat_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: hcak_soat_localstack
+    environment:
+      - SERVICES=s3,sqs,sns
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    volumes:
+      - localstack-data:/tmp/localstack
+    networks:
+      - dev-network
+
+volumes:
+  postgres-data:
+  redis-data:
+  localstack-data:
 
 networks:
   dev-network:
     driver: bridge
-
-volumes:
-  postgres-data:
