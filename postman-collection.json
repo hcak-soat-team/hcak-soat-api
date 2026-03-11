@@ -1,0 +1,151 @@
+﻿{
+  "info": {
+    "_postman_id": "hcak-soat-api-collection",
+    "name": "HCAK SOAT API",
+    "description": "Collection de testes para hcak-soat-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "item": [
+      {
+        "name": "Health",
+        "item": [
+          {
+            "name": "Health Check",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/health",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["health"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Videos",
+        "item": [
+          {
+            "name": "Create Video",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\\n  \"userId\": \"user-123\",\\n  \"s3Key\": \"uploads/test-video.mp4\",\\n  \"fileName\": \"test-video.mp4\",\\n  \"fileSizeBytes\": 52428800,\\n  \"mimeType\": \"video/mp4\",\\n  \"userEmail\": \"user@example.com\"\\n}"
+              },
+              "url": {
+                "raw": "http://localhost:3000/videos",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos"]
+              }
+            }
+          },
+          {
+            "name": "List User Videos",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/videos?userId=user-123",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos"],
+                "query": [
+                  {
+                    "key": "userId",
+                    "value": "user-123"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "List All Videos",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/videos/all?limit=10&offset=0",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos", "all"],
+                "query": [
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  },
+                  {
+                    "key": "offset",
+                    "value": "0"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get Video by ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/videos/{{video_id}}",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos", "{{video_id}}"]
+              }
+            }
+          },
+          {
+            "name": "Get Presigned Upload URL",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/videos/{{video_id}}/presigned-upload",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos", "{{video_id}}", "presigned-upload"]
+              }
+            }
+          },
+          {
+            "name": "Get Presigned Download URL",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "http://localhost:3000/videos/{{video_id}}/download",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["videos", "{{video_id}}", "download"]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "video_id",
+        "value": "550e8400-e29b-41d4-a716-446655440000",
+        "type": "string"
+      }
+    ]
+  }
+}
